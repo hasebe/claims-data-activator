@@ -20,13 +20,13 @@
 resource "google_app_engine_application" "firebase_init" {
   provider      = google
   project       = var.project_id
-  location_id   = var.firestore_region
+  location_id   = var.firestore_location
   database_type = "CLOUD_FIRESTORE"
 }
 
 resource "google_storage_bucket" "firestore-backup-bucket" {
   name          = "${var.project_id}-firestore-backup"
-  location      = var.storage_multiregion
+  location      = var.storage_location
   storage_class = "NEARLINE"
   labels = {
     goog-packaged-solution = "prior-authorization"

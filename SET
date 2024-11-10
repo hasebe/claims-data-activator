@@ -15,7 +15,7 @@
 # limitations under the License.
 
 export BASE_DIR=$(pwd)
-export REGION=us-central1
+export REGION="us-central1"
 
 # Shared VPC Config
 export NETWORK=cda-vpc
@@ -43,13 +43,20 @@ export TF_VAR_api_domain=$API_DOMAIN
 export TF_VAR_project_id=$PROJECT_ID
 export TF_VAR_docai_project_id=${DOCAI_PROJECT_ID:-$PROJECT_ID}
 export TF_BUCKET_NAME="${PROJECT_ID}-tfstate"
-export TF_BUCKET_LOCATION="us"
+export TF_BUCKET_LOCATION=$REGION
 export TF_VAR_config_bucket="${PROJECT_ID}-config"
 export TF_VAR_region=$REGION
 export TF_VAR_iap_secret_name="${IAP_SECRET_NAME}"
 export TF_VAR_dataset_id="${BIGQUERY_DATASET}"
 export TF_VAR_service_account_name_gke=${SA_GKE}
 export TF_VAR_repo_name="ar-artifacts"
+# For regional CDA deployment, uncomment the following code.
+#export TF_VAR_firestore_location=$REGION
+#export TF_VAR_storage_location=$REGION
+#export TF_VAR_dataset_location=$REGION
+#export TF_VAR_eventarc_location=$REGION
+#export TF_VAR_docai_location="us"
+
 # used by Microservices
 export CONFIG_BUCKET=${TF_VAR_config_bucket}
 export DEBUG=True

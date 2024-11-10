@@ -17,7 +17,7 @@
 
 resource "google_storage_bucket" "cloudbuild-logs" {
   name          = "${var.project_id}-cloudbuild-logs"
-  location      = var.storage_multiregion
+  location      = var.storage_location
   storage_class = "NEARLINE"
 
   uniform_bucket_level_access = true

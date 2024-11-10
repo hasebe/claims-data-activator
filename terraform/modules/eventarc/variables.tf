@@ -46,9 +46,9 @@ variable "cloudrun_endpoint" {
   description = "cloudrun_endpoint"
 }
 
-variable "region" {
+variable "location" {
   type        = string
-  description = "region"
+  description = "Eventarc trigger location"
 }
 
 variable "service_account_email" {

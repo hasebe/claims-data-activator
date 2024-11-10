@@ -25,3 +25,9 @@ variable "dataset_id" {
   description = "Dataset ID"
 }
 
+variable "location" {
+  type        = string
+  description = "The geographic location where the bigquery dataset should reside"
+  default     = "US"
+}
+

@@ -62,6 +62,10 @@ resource "null_resource" "build-common-image" {
     src_hash = data.archive_file.common-zip.output_sha
   }
 
+  depends_on = [
+    google_storage_bucket.log-bucket,
+  ]
+
   provisioner "local-exec" {
     working_dir = "../../../common"
     command = join(" ", [
@@ -69,6 +73,7 @@ resource "null_resource" "build-common-image" {
       "--config=cloudbuild.yaml",
       "--gcs-source-staging-dir=gs://${var.project_id}-${var.name}-log/cblogs",
       "--default-buckets-behavior=regional-user-owned-bucket",
+      "--region=${var.region}",
       join("", [
         "--substitutions=",
         "_PROJECT_ID='${var.project_id}',",
@@ -102,6 +107,8 @@ resource "null_resource" "build-cloudrun-image" {
       "gcloud builds submit",
       "--config=cloudbuild.yaml",
       "--gcs-log-dir=gs://${var.project_id}-${var.name}-log",
+      "--default-buckets-behavior=regional-user-owned-bucket",
+      "--region=${var.region}",
       join("", [
         "--substitutions=",
         "_PROJECT_ID='${var.project_id}',",

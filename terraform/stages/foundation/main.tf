@@ -19,11 +19,10 @@
 locals {
   env = var.env
 
-  firestore_region   = var.firestore_region
-  multiregion        = var.multiregion
   project_id         = var.project_id
   forms_gcs_path     = "${var.project_id}-pa-forms"
   config_bucket_name = var.config_bucket
+  storage_location   = var.storage_location
   services = [
     "appengine.googleapis.com",            # AppEngine
     "artifactregistry.googleapis.com",     # Artifact Registry
@@ -124,10 +123,11 @@ resource "time_sleep" "wait_for_project_services" {
 }
 
 module "firebase" {
-  depends_on       = [time_sleep.wait_for_project_services]
-  source           = "../../modules/firebase"
-  project_id       = var.project_id
-  firestore_region = var.firestore_region
+  depends_on          = [time_sleep.wait_for_project_services]
+  source              = "../../modules/firebase"
+  project_id          = var.project_id
+  firestore_location  = var.firestore_location
+  storage_location    = var.storage_location
 }
 
 module "vpc_network" {
@@ -288,7 +288,7 @@ resource "google_project_iam_member" "gcs_pubsub_publishing" {
 # Bucket to process batch documents on START_PIPELINE
 resource "google_storage_bucket" "document-load" {
   name                        = local.forms_gcs_path
-  location                    = local.multiregion
+  location                    = local.storage_location
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
   force_destroy               = true
@@ -330,7 +330,7 @@ module "cloudrun-startspipeline-eventarc" {
   source                = "../../modules/eventarc"
   topic                 = "startpipeline-topic"
   project_id            = var.project_id
-  region                = local.multiregion
+  location              = local.storage_location
   cloudrun_name         = module.cloudrun-start-pipeline.name
   cloudrun_location     = module.cloudrun-start-pipeline.location
   cloudrun_endpoint     = module.cloudrun-start-pipeline.endpoint
@@ -360,6 +360,7 @@ module "validation_bigquery" {
   source     = "../../modules/bigquery"
   dataset_id = var.dataset_id
   project_id = var.project_id
+  location   = var.dataset_location
 }
 
 # Create Views.
@@ -380,6 +381,7 @@ module "docai" {
   ]
   source     = "../../modules/docai"
   project_id = var.docai_project_id
+  location   = var.docai_location
 
   # See modules/docai/README.md for available DocAI processor types.
   # Once applied Terraform changes, please run /setup/update_config.sh
@@ -445,7 +447,7 @@ resource "google_storage_bucket_iam_binding" "cda-docai_sa_storage_output_bindin
 
 resource "google_storage_bucket" "default" {
   name                        = local.project_id
-  location                    = local.multiregion
+  location                    = local.storage_location
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
   force_destroy               = true
@@ -456,7 +458,7 @@ resource "google_storage_bucket" "default" {
 
 resource "google_storage_bucket" "document-upload" {
   name                        = "${local.project_id}-document-upload"
-  location                    = local.multiregion
+  location                    = local.storage_location
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
   force_destroy               = true
@@ -469,7 +471,7 @@ resource "google_storage_bucket" "document-upload" {
 # Bucket to store config
 resource "google_storage_bucket" "pa-config" {
   name                        = local.config_bucket_name
-  location                    = local.multiregion
+  location                    = local.storage_location
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
   force_destroy               = true
@@ -484,7 +486,7 @@ resource "google_storage_bucket" "pa-config" {
 
 resource "google_storage_bucket" "docai-output" {
   name                        = "${local.project_id}-docai-output"
-  location                    = local.multiregion
+  location                    = local.storage_location
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
   force_destroy               = true

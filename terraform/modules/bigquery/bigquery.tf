@@ -21,7 +21,7 @@ resource "google_bigquery_dataset" "data_set" {
   dataset_id    = var.dataset_id
   friendly_name = "Validation Dataset"
   description   = "BQ dataset for validation process"
-  location      = "US"
+  location      = var.location
   labels = {
     goog-packaged-solution = "prior-authorization"
   }

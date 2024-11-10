@@ -20,7 +20,7 @@ variable "project_id" {
   description = "project ID"
 }
 
-variable "firestore_region" {
+variable "firestore_location" {
   type        = string
   description = "Firestore Region - must be app_engine region"
   # options for firestore: https://cloud.google.com/appengine/docs/locations
@@ -28,7 +28,8 @@ variable "firestore_region" {
   default     = "us-central"
 }
 
-variable "storage_multiregion" {
-  type    = string
-  default = "us"
+variable "storage_location" {
+  type        = string
+  description = "GCS bucket location for firestore-backup-bucket"
+  default     = "us"
 }

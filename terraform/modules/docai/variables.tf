@@ -24,7 +24,8 @@ variable "processors" {
   type        = any
 }
 
-variable "multiregion" {
-  type    = string
-  default = "us"
+variable "location" {
+  type        = string
+  description = "The location of the docai parser"
+  default     = "us"
 }

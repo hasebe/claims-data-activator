@@ -20,6 +20,8 @@ variable "project_id" {
   description = "project ID"
 }
 
-variable "storage_multiregion" {
+variable "storage_location" {
   type        = string
+  description = "GCS bucket location for cloudbuild-logs"
+  default     = "us"
 }

@@ -64,9 +64,9 @@ variable "region" {
   }
 }
 
-variable "firestore_region" {
+variable "firestore_location" {
   type        = string
-  description = "Firestore Region"
+  description = "Firestore Location"
   default     = "us-central"
 }
 
@@ -74,11 +74,6 @@ variable "dataset_location" {
   type        = string
   description = "BigQuery Dataset location"
   default     = "US"
-}
-
-variable "multiregion" {
-  type    = string
-  default = "us"
 }
 
 variable "env" {
@@ -211,4 +206,22 @@ variable "cda_external_ui" {
   type        = bool
   description = "Expose UI to public internet"
   default     = false
+}
+
+variable "storage_location" {
+  type        = string
+  description = "GCS buckets location"
+  default     = "us"
+}
+
+variable "eventarc_location" {
+  type        = string
+  description = "Eventarc trigger location"
+  default     = "us-central1"
+}
+
+variable "docai_location" {
+  type        = string
+  description = "DocAI parser location"
+  default     = "us"
 }

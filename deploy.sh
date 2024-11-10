@@ -54,6 +54,13 @@ else
   gsutil cp "gs://${TF_VAR_config_bucket}/.env" "${DIR}/microservices/adp_ui/.env"  | tee -a "$LOG"
 fi
 
+CLOUD_BUILD_REGION="${REGION:-"us"}"
+echo "Set CLOUD_BUILD_REGION as $CLOUD_BUILD_REGION"
+
+# Create GCS bucket for skaffold in $CLOUD_BUILD_REGION, since Scaffold
+# automatically tries to create $PROJECT_ID_cloudbuild bucket in US region
+gsutil mb -l $CLOUD_BUILD_REGION gs://${PROJECT_ID}_cloudbuild
+
 
 skaffold run -p "$ENV" | tee -a "$LOG"
 
